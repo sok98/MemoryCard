@@ -12,10 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MemoryCard">
         <activity
-            android:name=".WordCardActivity"
+            android:name=".wordlist.AddWordActivity"
             android:exported="true" />
         <activity
-            android:name=".WordListActivity"
+            android:name=".wordcard.WordCardActivity"
+            android:exported="true" />
+        <activity
+            android:name=".wordlist.WordListActivity"
             android:exported="true" />
         <activity
             android:name=".LoginActivity"

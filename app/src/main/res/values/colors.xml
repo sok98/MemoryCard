@@ -9,5 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray_button">#959595</color>
     <color name="gray_line">#ECECECEC</color>
-    <color name="card_color">#025F9E</color>
+    <color name="navy_card">#013A60</color>
 </resources>
