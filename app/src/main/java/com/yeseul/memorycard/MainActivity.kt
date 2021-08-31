@@ -3,13 +3,26 @@ package com.yeseul.memorycard
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.google.firebase.auth.FirebaseAuth
+import androidx.datastore.DataStore
+import androidx.datastore.preferences.Preferences
+import androidx.datastore.preferences.createDataStore
+import androidx.datastore.preferences.edit
+import androidx.datastore.preferences.preferencesKey
+import androidx.lifecycle.lifecycleScope
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.yeseul.memorycard.data.DBKey.Companion.USER_ID
+import com.yeseul.memorycard.data.DataStoreKey.Companion.DATASTORE
+import com.yeseul.memorycard.data.DataStoreKey.Companion.USER_KEY
 import com.yeseul.memorycard.presentation.wordlist.WordListActivity
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val auth : FirebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var dataStore: DataStore<Preferences>
+    private val dataStoreKey = preferencesKey<String>(USER_KEY)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,15 +31,39 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        val uniqueID = UUID.randomUUID().toString()
-        // TODO UUID 값 datastore에 저장하고 읽어오기
 
-        if(auth.currentUser == null) {
-            startActivity(Intent(this, LoginActivity::class.java))
-        } else {
-            startActivity(Intent(this, WordListActivity::class.java))
-            finish()
+        dataStore = createDataStore(DATASTORE)
+        lifecycleScope.launch {
+            if (read() == null) {
+                val uniqueID = UUID.randomUUID().toString()
+                save(uniqueID)
+            }
+            read()?.let {
+                makeDatabase(it)
+            }
         }
+
+        startActivity(Intent(this, WordListActivity::class.java))
+        finish()
+    }
+
+    private suspend fun save(value: String) {
+        dataStore.edit { settings ->
+            settings[dataStoreKey] = value
+        }
+    }
+
+    private suspend fun read(): String? {
+        val preferences = dataStore.data.first()
+        return preferences[dataStoreKey]
+    }
+
+    private fun makeDatabase(userId: String) {
+        val currentUserDB = Firebase.database.reference.child(userId)
+        val user = mutableMapOf<String, Any>()
+        user[USER_ID] = userId
+        currentUserDB.updateChildren(user)
+        finish()
     }
 }
 

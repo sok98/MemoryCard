@@ -4,6 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.datastore.DataStore
+import androidx.datastore.preferences.Preferences
+import androidx.datastore.preferences.createDataStore
+import androidx.datastore.preferences.preferencesKey
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -16,18 +21,24 @@ import com.yeseul.memorycard.data.DBKey.Companion.MEANING
 import com.yeseul.memorycard.data.DBKey.Companion.WORD
 import com.yeseul.memorycard.adapter.CardAdapter
 import com.yeseul.memorycard.data.CardItem
+import com.yeseul.memorycard.data.DataStoreKey
 import com.yeseul.memorycard.databinding.ActivityWordCardBinding
 import com.yeseul.memorycard.presentation.wordlist.WordListActivity
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
 import com.yuyakaido.android.cardstackview.CardStackListener
 import com.yuyakaido.android.cardstackview.Direction
 import com.yuyakaido.android.cardstackview.StackFrom
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class WordCardActivity : AppCompatActivity(), CardStackListener {
 
     private lateinit var binding: ActivityWordCardBinding
-    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private lateinit var wordDB: DatabaseReference
+
+    private lateinit var dataStore: DataStore<Preferences>
+    private val dataStoreKey = preferencesKey<String>(DataStoreKey.USER_KEY)
+    private lateinit var userId : String
+    private lateinit var wordDB : DatabaseReference
 
     private val manager by lazy {
         CardStackLayoutManager(this, this)
@@ -40,15 +51,22 @@ class WordCardActivity : AppCompatActivity(), CardStackListener {
         binding = ActivityWordCardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val userId = auth.currentUser?.uid.orEmpty()
-        wordDB = Firebase.database.reference.child(userId).child(DB_WORDS)
-
-        getCardItems()
-
+        loadCard()
         initCardStackView()
+        initReloadCardButton()
         initShowWordListButton()
 
+    }
 
+    private fun loadCard() {
+        dataStore = createDataStore(DataStoreKey.DATASTORE)
+        lifecycleScope.launch {
+            read()?.let {
+                userId = it
+                wordDB = Firebase.database.reference.child(userId).child(DB_WORDS)
+                getCardItems()
+            }
+        }
     }
 
     private fun initCardStackView() {
@@ -58,6 +76,12 @@ class WordCardActivity : AppCompatActivity(), CardStackListener {
         stackView.adapter = adapter
     }
 
+    private fun initReloadCardButton() {
+        binding.reloadCardButton.setOnClickListener {
+            loadCard()
+        }
+    }
+
     private fun initShowWordListButton() {
         binding.showWordListButton.setOnClickListener {
             startActivity(Intent(this, WordListActivity::class.java))
@@ -65,9 +89,9 @@ class WordCardActivity : AppCompatActivity(), CardStackListener {
     }
 
     private fun getCardItems() {
+        cardItems.clear()
         wordDB.addChildEventListener(object: ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-
                 val word = snapshot.child(WORD).value.toString()
                 val meaning = snapshot.child(MEANING).value.toString()
 
@@ -91,6 +115,11 @@ class WordCardActivity : AppCompatActivity(), CardStackListener {
             override fun onCancelled(error: DatabaseError) {}
 
         })
+    }
+
+    private suspend fun read(): String? {
+        val preferences = dataStore.data.first()
+        return preferences[dataStoreKey]
     }
 
     private fun check() {
