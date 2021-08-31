@@ -1,4 +1,4 @@
-package com.yeseul.memorycard.wordcard
+package com.yeseul.memorycard.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yeseul.memorycard.databinding.ItemWordCardBinding
+import com.yeseul.memorycard.data.CardItem
 
 class CardAdapter : ListAdapter<CardItem, CardAdapter.ViewHolder>(diffUtil) {
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".wordcard.WordCardActivity">
+    tools:context=".presentation.wordcard.WordCardActivity">
 
     <TextView
         android:id="@+id/toolbarTextView"
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:src="@drawable/ic_baseline_check_box_outline_blank_24"
+        android:src="@drawable/ic_baseline_thumb_down_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardStackView" />
 
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
-        android:src="@drawable/ic_baseline_check_box_24"
+        android:src="@drawable/ic_baseline_thumb_up_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardStackView" />
 

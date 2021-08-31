@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.yeseul.memorycard">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PRECISE_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
 
     <application
         android:allowBackup="true"
@@ -12,13 +15,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MemoryCard">
         <activity
-            android:name=".wordlist.AddWordActivity"
+            android:name="com.yeseul.memorycard.presentation.wordlist.AddWordActivity"
             android:exported="true" />
         <activity
-            android:name=".wordcard.WordCardActivity"
+            android:name="com.yeseul.memorycard.presentation.wordcard.WordCardActivity"
             android:exported="true" />
         <activity
-            android:name=".wordlist.WordListActivity"
+            android:name="com.yeseul.memorycard.presentation.wordlist.WordListActivity"
             android:exported="true" />
         <activity
             android:name=".LoginActivity"

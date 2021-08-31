@@ -1,4 +1,4 @@
-package com.yeseul.memorycard.wordcard
+package com.yeseul.memorycard.presentation.wordcard
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -11,12 +11,13 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.yeseul.memorycard.DBKey.Companion.DB_WORDS
-import com.yeseul.memorycard.DBKey.Companion.MEANING
-import com.yeseul.memorycard.DBKey.Companion.USER_ID
-import com.yeseul.memorycard.DBKey.Companion.WORD
+import com.yeseul.memorycard.data.DBKey.Companion.DB_WORDS
+import com.yeseul.memorycard.data.DBKey.Companion.MEANING
+import com.yeseul.memorycard.data.DBKey.Companion.WORD
+import com.yeseul.memorycard.adapter.CardAdapter
+import com.yeseul.memorycard.data.CardItem
 import com.yeseul.memorycard.databinding.ActivityWordCardBinding
-import com.yeseul.memorycard.wordlist.WordListActivity
+import com.yeseul.memorycard.presentation.wordlist.WordListActivity
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
 import com.yuyakaido.android.cardstackview.CardStackListener
 import com.yuyakaido.android.cardstackview.Direction

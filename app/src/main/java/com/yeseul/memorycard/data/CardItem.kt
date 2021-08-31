@@ -1,4 +1,6 @@
-package com.yeseul.memorycard.wordcard
+package com.yeseul.memorycard.data
+
+import java.util.*
 
 data class CardItem(
     val word: String,

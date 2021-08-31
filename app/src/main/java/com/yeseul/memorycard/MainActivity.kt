@@ -4,10 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import com.yeseul.memorycard.wordlist.WordListActivity
+import com.yeseul.memorycard.presentation.wordlist.WordListActivity
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,6 +18,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        val uniqueID = UUID.randomUUID().toString()
+        // TODO UUID 값 datastore에 저장하고 읽어오기
+
         if(auth.currentUser == null) {
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
@@ -28,3 +29,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+

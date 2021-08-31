@@ -1,13 +1,12 @@
-package com.yeseul.memorycard.wordlist
+package com.yeseul.memorycard.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yeseul.memorycard.databinding.ItemWordListBinding
+import com.yeseul.memorycard.data.WordModel
 
 class WordAdapter : ListAdapter<WordModel, WordAdapter.ViewHolder>(diffUtil) {
 
@@ -25,11 +24,11 @@ class WordAdapter : ListAdapter<WordModel, WordAdapter.ViewHolder>(diffUtil) {
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemWordListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    override fun onBindViewHolder(holder: WordAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(currentList[position])
     }
 

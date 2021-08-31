@@ -1,15 +1,14 @@
-package com.yeseul.memorycard.wordlist
+package com.yeseul.memorycard.presentation.wordlist
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.view.isVisible
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.yeseul.memorycard.DBKey.Companion.DB_WORDS
-import com.yeseul.memorycard.R
+import com.yeseul.memorycard.data.DBKey.Companion.DB_WORDS
+import com.yeseul.memorycard.data.WordModel
 import com.yeseul.memorycard.databinding.ActivityAddWordBinding
 
 class AddWordActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.yeseul.memorycard.wordlist
+package com.yeseul.memorycard.data
 
 data class WordModel(
     val word: String,
