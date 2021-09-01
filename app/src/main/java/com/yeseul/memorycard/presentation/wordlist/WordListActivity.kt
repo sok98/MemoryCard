@@ -30,7 +30,6 @@ class WordListActivity : AppCompatActivity() {
     private lateinit var wordAdapter: WordAdapter
 
     private lateinit var dataStore: DataStore<Preferences>
-    private val dataStoreKey = preferencesKey<String>(DataStoreKey.USER_KEY)
     private lateinit var userId : String
     private lateinit var wordDB : DatabaseReference
 
@@ -53,6 +52,17 @@ class WordListActivity : AppCompatActivity() {
         binding = ActivityWordListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.isRefreshing = false
+            getWordList()
+        }
+
+        getWordList()
+        initShowWordCardButton()
+        initAddFloatingButton()
+    }
+
+    private fun getWordList() {
         wordList.clear()
         wordAdapter = WordAdapter()
 
@@ -65,12 +75,8 @@ class WordListActivity : AppCompatActivity() {
             }
         }
 
-
         binding.wordRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.wordRecyclerView.adapter = wordAdapter
-
-        initShowWordCardButton()
-        initAddFloatingButton()
     }
 
     private fun initShowWordCardButton() {
@@ -86,6 +92,7 @@ class WordListActivity : AppCompatActivity() {
     }
 
     private suspend fun read(): String? {
+        val dataStoreKey = preferencesKey<String>(DataStoreKey.USER_KEY)
         val preferences = dataStore.data.first()
         return preferences[dataStoreKey]
     }

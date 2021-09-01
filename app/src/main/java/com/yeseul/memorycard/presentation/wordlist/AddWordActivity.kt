@@ -25,7 +25,6 @@ class AddWordActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddWordBinding
     private lateinit var dataStore: DataStore<Preferences>
-    private val dataStoreKey = preferencesKey<String>(DataStoreKey.USER_KEY)
     private lateinit var userId : String
     private lateinit var wordDB : DatabaseReference
 
@@ -53,6 +52,7 @@ class AddWordActivity : AppCompatActivity() {
     }
 
     private suspend fun read(): String? {
+        val dataStoreKey = preferencesKey<String>(DataStoreKey.USER_KEY)
         val preferences = dataStore.data.first()
         return preferences[dataStoreKey]
     }

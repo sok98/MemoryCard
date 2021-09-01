@@ -1,7 +1,10 @@
 package com.yeseul.memorycard.adapter
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,12 +15,17 @@ class WordAdapter : ListAdapter<WordModel, WordAdapter.ViewHolder>(diffUtil) {
 
     inner class ViewHolder(private val binding: ItemWordListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(wordModel: WordModel) {
-            binding.wordTextView.text = wordModel.word
             val checkbox = binding.checkBox
-            checkbox.setOnClickListener {
-                checkbox.toggle()
-//                binding.checkBox.isChecked = !checkbox.isChecked
+            checkbox.text = wordModel.word
+
+            checkbox.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    Log.d("CHECK", "체크 : ${wordModel.word}")
+                } else {
+                    Log.d("CHECK", "체크해제 : ${wordModel.word}")
+                }
             }
+
             binding.root.setOnClickListener {
                 // Todo 단어 상세 페이지로 이동
             }
