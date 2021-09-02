@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yeseul.memorycard.databinding.ItemWordListBinding
 import com.yeseul.memorycard.data.WordModel
 
-class WordAdapter : ListAdapter<WordModel, WordAdapter.ViewHolder>(diffUtil) {
+class WordAdapter(val onChecked: (WordModel, Boolean) -> Unit, val onClicked: (WordModel) -> Unit) : ListAdapter<WordModel, WordAdapter.ViewHolder>(diffUtil) {
 
     inner class ViewHolder(private val binding: ItemWordListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(wordModel: WordModel) {
@@ -20,14 +20,14 @@ class WordAdapter : ListAdapter<WordModel, WordAdapter.ViewHolder>(diffUtil) {
 
             checkbox.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    Log.d("CHECK", "체크 : ${wordModel.word}")
+                    onChecked(wordModel, true)
                 } else {
-                    Log.d("CHECK", "체크해제 : ${wordModel.word}")
+                    onChecked(wordModel, false)
                 }
             }
 
             binding.root.setOnClickListener {
-                // Todo 단어 상세 페이지로 이동
+                onClicked(wordModel)
             }
         }
     }

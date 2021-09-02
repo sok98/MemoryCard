@@ -64,7 +64,11 @@ class WordListActivity : AppCompatActivity() {
 
     private fun getWordList() {
         wordList.clear()
-        wordAdapter = WordAdapter()
+        wordAdapter = WordAdapter(onChecked = { wordModel, b ->
+            // todo wordModel.check를 b로 바꾸기
+        }, onClicked = { wordModel ->
+            // todo 수정 페이지로 이동
+        })
 
         dataStore = createDataStore(DataStoreKey.DATASTORE)
         lifecycleScope.launch {
