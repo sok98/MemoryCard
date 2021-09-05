@@ -2,24 +2,24 @@ package com.yeseul.memorycard.presentation.wordlist
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.core.view.isVisible
 import androidx.datastore.DataStore
 import androidx.datastore.preferences.Preferences
 import androidx.datastore.preferences.createDataStore
 import androidx.datastore.preferences.preferencesKey
 import androidx.lifecycle.lifecycleScope
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.yeseul.memorycard.data.DBKey.Companion.DB_WORDS
 import com.yeseul.memorycard.data.DataStoreKey
-import com.yeseul.memorycard.data.WordModel
+import com.yeseul.memorycard.data.db.WordDatabase
+import com.yeseul.memorycard.data.db.entity.Word
+import com.yeseul.memorycard.data.db.entity.WordModel
 import com.yeseul.memorycard.databinding.ActivityAddWordBinding
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.util.*
 
 class AddWordActivity : AppCompatActivity() {
 
@@ -58,10 +58,12 @@ class AddWordActivity : AppCompatActivity() {
     }
 
     private fun uploadWord(word: String, meaning: String, description: String) {
-        val model = WordModel(word, meaning, description, false)
-        wordDB.push().setValue(model)
+        Thread(Runnable {
+            val model = Word(word, meaning, description, false)
+            val db = WordDatabase.getInstance(applicationContext)
+            db!!.wordDao().insertWord(model)
+        }).start()
         hideProgress()
-        finish()
     }
 
     private fun showProgress() {

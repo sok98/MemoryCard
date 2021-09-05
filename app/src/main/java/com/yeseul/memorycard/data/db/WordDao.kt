@@ -1,10 +1,9 @@
 package com.yeseul.memorycard.data.db
 
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.yeseul.memorycard.data.db.entity.Word
 
+@Dao
 interface WordDao {
 
     @Query("SELECT * FROM wordTable")
@@ -16,13 +15,16 @@ interface WordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertWord(word: Word)
 
-    @Query("DELETE FROM wordTable WHERE idx=:idx")
-    fun deleteWord(idx: Int)
+    @Query("DELETE FROM wordTable WHERE id=:id")
+    fun deleteWord(id: Int)
 
-    @Query("UPDATE wordTable set checked= :checked WHERE idx=:idx")
-    fun updateCheck(idx: Int, checked: Boolean)
+    @Query("UPDATE wordTable set checked= :checked WHERE id=:id")
+    fun updateCheck(id: Int, checked: Boolean)
 
-    @Query("UPDATE wordTable set word=:word, meaning=:meaning, description=:description WHERE idx=:idx")
-    fun updateAll(idx: Int, word: String, meaning: String, description: String)
+    @Update
+    fun updateAll(word: Word)
+
+//    @Query("UPDATE wordTable set word=:word, meaning=:meaning, description=:description WHERE id=:id")
+//    fun updateAll(id: Int, word: String, meaning: String, description: String)
 
 }

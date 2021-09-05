@@ -9,15 +9,13 @@ import androidx.datastore.preferences.createDataStore
 import androidx.datastore.preferences.preferencesKey
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.yeseul.memorycard.data.DBKey.Companion.DB_WORDS
 import com.yeseul.memorycard.adapter.WordAdapter
 import com.yeseul.memorycard.data.DataStoreKey
-import com.yeseul.memorycard.data.WordModel
+import com.yeseul.memorycard.data.db.entity.WordModel
 import com.yeseul.memorycard.presentation.wordcard.WordCardActivity
 import com.yeseul.memorycard.databinding.ActivityWordListBinding
 import kotlinx.coroutines.flow.first

@@ -1,15 +1,12 @@
 package com.yeseul.memorycard.adapter
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yeseul.memorycard.databinding.ItemWordListBinding
-import com.yeseul.memorycard.data.WordModel
+import com.yeseul.memorycard.data.db.entity.WordModel
 
 class WordAdapter(val onChecked: (WordModel, Boolean) -> Unit, val onClicked: (WordModel) -> Unit) : ListAdapter<WordModel, WordAdapter.ViewHolder>(diffUtil) {
 
