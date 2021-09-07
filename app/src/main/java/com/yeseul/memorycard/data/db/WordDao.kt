@@ -1,5 +1,6 @@
 package com.yeseul.memorycard.data.db
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.yeseul.memorycard.data.db.entity.Word
 
@@ -7,10 +8,13 @@ import com.yeseul.memorycard.data.db.entity.Word
 interface WordDao {
 
     @Query("SELECT * FROM wordTable")
-    fun getALl(): List<Word>
+    fun getALl(): LiveData<List<Word>>
+
+    @Query("SELECT * FROM wordTable WHERE id=:id")
+    fun getOne(id: Int): Word
 
     @Query("SELECT * FROM wordTable WHERE checked='false'")
-    fun getUnchecked(): List<Word>
+    fun getUnchecked(): LiveData<List<Word>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertWord(word: Word)
@@ -18,13 +22,10 @@ interface WordDao {
     @Query("DELETE FROM wordTable WHERE id=:id")
     fun deleteWord(id: Int)
 
+    @Query("UPDATE wordTable set word=:word, meaning=:meaning, description=:description WHERE id=:id")
+    fun updateWord(id: Int, word: String, meaning: String, description: String)
+
     @Query("UPDATE wordTable set checked= :checked WHERE id=:id")
     fun updateCheck(id: Int, checked: Boolean)
-
-    @Update
-    fun updateAll(word: Word)
-
-//    @Query("UPDATE wordTable set word=:word, meaning=:meaning, description=:description WHERE id=:id")
-//    fun updateAll(id: Int, word: String, meaning: String, description: String)
 
 }

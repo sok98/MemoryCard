@@ -9,19 +9,14 @@ import androidx.datastore.preferences.Preferences
 import androidx.datastore.preferences.createDataStore
 import androidx.datastore.preferences.preferencesKey
 import androidx.lifecycle.lifecycleScope
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.yeseul.memorycard.data.DBKey.Companion.DB_WORDS
-import com.yeseul.memorycard.data.DBKey.Companion.MEANING
-import com.yeseul.memorycard.data.DBKey.Companion.WORD
 import com.yeseul.memorycard.adapter.CardAdapter
 import com.yeseul.memorycard.data.CardItem
-import com.yeseul.memorycard.data.DataStoreKey
 import com.yeseul.memorycard.databinding.ActivityWordCardBinding
 import com.yeseul.memorycard.presentation.wordlist.WordListActivity
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
@@ -58,14 +53,7 @@ class WordCardActivity : AppCompatActivity(), CardStackListener {
     }
 
     private fun loadCard() {
-        dataStore = createDataStore(DataStoreKey.DATASTORE)
-        lifecycleScope.launch {
-            read()?.let {
-                userId = it
-                wordDB = Firebase.database.reference.child(userId).child(DB_WORDS)
-                getCardItems()
-            }
-        }
+
     }
 
     private fun initCardStackView() {
@@ -89,37 +77,31 @@ class WordCardActivity : AppCompatActivity(), CardStackListener {
 
     private fun getCardItems() {
         cardItems.clear()
-        wordDB.addChildEventListener(object: ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val word = snapshot.child(WORD).value.toString()
-                val meaning = snapshot.child(MEANING).value.toString()
-
-                cardItems.add(CardItem(word, meaning))
-                adapter.submitList(cardItems)
-                adapter.notifyDataSetChanged()
-            }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                cardItems.find { it.word == snapshot.key }?.let {
-                    it.meaning = snapshot.child(MEANING).value.toString()
-                }
-                adapter.submitList(cardItems)
-                adapter.notifyDataSetChanged()
-            }
-
-            override fun onChildRemoved(snapshot: DataSnapshot) {}
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-
-            override fun onCancelled(error: DatabaseError) {}
-
-        })
-    }
-
-    private suspend fun read(): String? {
-        val dataStoreKey = preferencesKey<String>(DataStoreKey.USER_KEY)
-        val preferences = dataStore.data.first()
-        return preferences[dataStoreKey]
+//        wordDB.addChildEventListener(object: ChildEventListener {
+//            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+//                val word = snapshot.child(WORD).value.toString()
+//                val meaning = snapshot.child(MEANING).value.toString()
+//
+//                cardItems.add(CardItem(word, meaning))
+//                adapter.submitList(cardItems)
+//                adapter.notifyDataSetChanged()
+//            }
+//
+//            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+//                cardItems.find { it.word == snapshot.key }?.let {
+//                    it.meaning = snapshot.child(MEANING).value.toString()
+//                }
+//                adapter.submitList(cardItems)
+//                adapter.notifyDataSetChanged()
+//            }
+//
+//            override fun onChildRemoved(snapshot: DataSnapshot) {}
+//
+//            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+//
+//            override fun onCancelled(error: DatabaseError) {}
+//
+//        })
     }
 
     private fun check() {

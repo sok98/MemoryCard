@@ -24,9 +24,6 @@
             android:name="com.yeseul.memorycard.presentation.wordlist.WordListActivity"
             android:exported="true" />
         <activity
-            android:name=".LoginActivity"
-            android:exported="true" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

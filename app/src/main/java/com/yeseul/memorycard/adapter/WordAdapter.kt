@@ -5,26 +5,24 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.yeseul.memorycard.data.db.entity.Word
 import com.yeseul.memorycard.databinding.ItemWordListBinding
-import com.yeseul.memorycard.data.db.entity.WordModel
 
-class WordAdapter(val onChecked: (WordModel, Boolean) -> Unit, val onClicked: (WordModel) -> Unit) : ListAdapter<WordModel, WordAdapter.ViewHolder>(diffUtil) {
+class WordAdapter(val onChecked: (Word, Boolean) -> Unit, val onClicked: (Word) -> Unit)
+    : ListAdapter<Word, WordAdapter.ViewHolder>(diffUtil) {
 
     inner class ViewHolder(private val binding: ItemWordListBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(wordModel: WordModel) {
+        fun bind(word: Word) {
             val checkbox = binding.checkBox
-            checkbox.text = wordModel.word
+            checkbox.text = word.word
+            checkbox.isChecked = word.checked
 
             checkbox.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    onChecked(wordModel, true)
-                } else {
-                    onChecked(wordModel, false)
-                }
+                onChecked(word, isChecked)
             }
 
             binding.root.setOnClickListener {
-                onClicked(wordModel)
+                onClicked(word)
             }
         }
     }
@@ -38,12 +36,12 @@ class WordAdapter(val onChecked: (WordModel, Boolean) -> Unit, val onClicked: (W
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<WordModel>() {
-            override fun areItemsTheSame(oldItem: WordModel, newItem: WordModel): Boolean {
-                return oldItem.word == newItem.word
+        val diffUtil = object : DiffUtil.ItemCallback<Word>() {
+            override fun areItemsTheSame(oldItem: Word, newItem: Word): Boolean {
+                return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: WordModel, newItem: WordModel): Boolean {
+            override fun areContentsTheSame(oldItem: Word, newItem: Word): Boolean {
                 return oldItem == newItem
             }
         }
