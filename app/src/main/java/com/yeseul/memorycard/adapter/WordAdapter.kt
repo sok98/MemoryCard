@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.yeseul.memorycard.R
 import com.yeseul.memorycard.data.db.entity.Word
 import com.yeseul.memorycard.databinding.ItemWordListBinding
 
@@ -13,17 +14,26 @@ class WordAdapter(val onChecked: (Word, Boolean) -> Unit, val onClicked: (Word) 
 
     inner class ViewHolder(private val binding: ItemWordListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(word: Word) {
-            val checkbox = binding.checkBox
-            checkbox.text = word.word
-            checkbox.isChecked = word.checked
+            val checked = word.checked
+            changeCheckImage(binding, checked)
+            binding.checkTextView.text = word.word
 
-            checkbox.setOnCheckedChangeListener { _, isChecked ->
-                onChecked(word, isChecked)
+            binding.checkImage.setOnClickListener {
+                changeCheckImage(binding, !checked)
+                onChecked(word, !checked)
             }
 
-            binding.root.setOnClickListener {
+            binding.checkTextView.setOnClickListener {
                 onClicked(word)
             }
+        }
+    }
+
+    private fun changeCheckImage(binding: ItemWordListBinding, checked: Boolean) {
+        if (checked) {
+            binding.checkImage.setImageResource(R.drawable.ic_baseline_check_box_24)
+        } else {
+            binding.checkImage.setImageResource(R.drawable.ic_baseline_check_box_outline_blank_24)
         }
     }
 
