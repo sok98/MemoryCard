@@ -3,10 +3,13 @@ package com.yeseul.memorycard.presentation.wordcard
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.yeseul.memorycard.adapter.CardAdapter
+import com.yeseul.memorycard.data.db.entity.Word
 import com.yeseul.memorycard.databinding.ActivityWordCardBinding
 import com.yeseul.memorycard.presentation.WordViewModel
 import com.yeseul.memorycard.presentation.wordlist.WordListActivity
@@ -14,6 +17,8 @@ import com.yuyakaido.android.cardstackview.CardStackLayoutManager
 import com.yuyakaido.android.cardstackview.CardStackListener
 import com.yuyakaido.android.cardstackview.Direction
 import com.yuyakaido.android.cardstackview.StackFrom
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class WordCardActivity : AppCompatActivity(), CardStackListener {
 
@@ -23,6 +28,8 @@ class WordCardActivity : AppCompatActivity(), CardStackListener {
     }
     private val adapter = CardAdapter()
     private val model: WordViewModel by viewModels()
+    private val cardItems = mutableListOf<Word>()
+    private var cardId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,22 +43,9 @@ class WordCardActivity : AppCompatActivity(), CardStackListener {
 
     }
 
-    private fun loadCard() {
-        model.getAll().observe(this, Observer { wordList ->
-            adapter.submitList(wordList)
-            adapter.notifyDataSetChanged()
-        })
-    }
-
-    private fun initCardStackView() {
-        val stackView = binding.cardStackView
-        manager.setStackFrom(StackFrom.Top)
-        stackView.layoutManager = manager
-        stackView.adapter = adapter
-    }
-
     private fun initReloadCardButton() {
         binding.reloadCardButton.setOnClickListener {
+            cardId = 0
             loadCard()
         }
     }
@@ -62,51 +56,48 @@ class WordCardActivity : AppCompatActivity(), CardStackListener {
         }
     }
 
-    private fun getCardItems() {
-//        cardItems.clear()
-//        wordDB.addChildEventListener(object: ChildEventListener {
-//            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-//                val word = snapshot.child(WORD).value.toString()
-//                val meaning = snapshot.child(MEANING).value.toString()
-//
-//                cardItems.add(CardItem(word, meaning))
-//                adapter.submitList(cardItems)
-//                adapter.notifyDataSetChanged()
-//            }
-//
-//            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-//                cardItems.find { it.word == snapshot.key }?.let {
-//                    it.meaning = snapshot.child(MEANING).value.toString()
-//                }
-//                adapter.submitList(cardItems)
-//                adapter.notifyDataSetChanged()
-//            }
-//
-//            override fun onChildRemoved(snapshot: DataSnapshot) {}
-//
-//            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-//
-//            override fun onCancelled(error: DatabaseError) {}
-//
-//        })
+    private fun initCardStackView() {
+        val stackView = binding.cardStackView
+        manager.setStackFrom(StackFrom.Top)
+        stackView.layoutManager = manager
+        stackView.adapter = adapter
     }
 
-    private fun check() {
-
+    private fun loadCard() {
+        model.getAll().observe(this, Observer { wordList ->
+            cardItems.clear()
+            wordList.forEach { word ->
+                if (word.id > cardId){
+                    cardItems.add(word)
+                }
+            }
+            adapter.submitList(cardItems)
+            adapter.notifyDataSetChanged()
+        })
     }
 
-    private fun uncheck() {
+    private fun check(id: Int) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            model.updateCheck(id, true)
+        }
+    }
 
+    private fun uncheck(id: Int) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            model.updateCheck(id, false)
+        }
     }
 
     override fun onCardDragging(direction: Direction?, ratio: Float) {}
 
     override fun onCardSwiped(direction: Direction?) {
-//        when (direction) {
-//            Direction.Right -> check()
-//            Direction.Left -> uncheck()
-//            else -> { }
-//        }
+        cardId = cardItems[manager.topPosition - 1].id
+        cardItems.removeFirst()
+        when (direction) {
+            Direction.Right -> check(cardId)
+            Direction.Left -> uncheck(cardId)
+            else -> { }
+        }
     }
 
     override fun onCardRewound() {}
