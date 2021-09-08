@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.yeseul.memorycard.presentation.wordlist.WordListActivity
+import java.util.logging.Handler
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,7 +15,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
         startActivity(Intent(this, WordListActivity::class.java))
         finish()
     }

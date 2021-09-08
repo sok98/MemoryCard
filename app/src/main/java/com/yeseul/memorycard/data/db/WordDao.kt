@@ -28,4 +28,7 @@ interface WordDao {
     @Query("UPDATE wordTable set checked= :checked WHERE id=:id")
     fun updateCheck(id: Int, checked: Boolean)
 
+    @Query("SELECT * FROM wordTable WHERE (word LIKE :keyword) OR (meaning LIKE :keyword) OR (description LIKE :keyword)")
+    fun searchWord(keyword: String) : LiveData<List<Word>>
+
 }

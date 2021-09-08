@@ -43,4 +43,8 @@ class WordRepository(application: Application) {
     fun updateCheck(id: Int, checked: Boolean) {
         wordDao.updateCheck(id, checked)
     }
+
+    fun searchWord(word: String) : LiveData<List<Word>> {
+        return wordDao.searchWord(word)
+    }
 }

@@ -3,13 +3,12 @@ package com.yeseul.memorycard.presentation.wordlist
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yeseul.memorycard.adapter.WordAdapter
-import com.yeseul.memorycard.data.db.WordDatabase
-import com.yeseul.memorycard.data.db.entity.Word
 import com.yeseul.memorycard.presentation.wordcard.WordCardActivity
 import com.yeseul.memorycard.databinding.ActivityWordListBinding
 import com.yeseul.memorycard.presentation.WordViewModel
@@ -27,6 +26,7 @@ class WordListActivity : AppCompatActivity() {
         binding = ActivityWordListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initSearchButton()
         initShowWordCardButton()
         initAddFloatingButton()
         initRecyclerView()
@@ -34,7 +34,23 @@ class WordListActivity : AppCompatActivity() {
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = false
+            binding.searchEditText.setText("")
             getWordList()
+        }
+    }
+
+
+    private fun initSearchButton() {
+        binding.searchImageButton.setOnClickListener {
+
+            val manager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            manager.hideSoftInputFromWindow(currentFocus!!.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            binding.searchEditText.clearFocus()
+
+            val searchWord = binding.searchEditText.text.toString()
+            model.searchWord(searchWord).observe(this, Observer { wordList ->
+                wordAdapter.submitList(wordList)
+            })
         }
     }
 
@@ -56,7 +72,6 @@ class WordListActivity : AppCompatActivity() {
                 model.updateCheck(word.id, b)
             }
         }, onClicked = { word ->
-            // todo 수정 페이지로 이동
             val intent = Intent(this, AddWordActivity::class.java)
             intent.putExtra("id", word.id)
             startActivity(intent)

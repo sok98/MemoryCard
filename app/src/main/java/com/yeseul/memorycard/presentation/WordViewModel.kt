@@ -36,4 +36,8 @@ class WordViewModel(application: Application) : AndroidViewModel(application) {
     fun updateWord(id: Int, word: String, meaning: String, description: String) {
         repository.updateWord(id, word, meaning, description)
     }
+
+    fun searchWord(word: String) : LiveData<List<Word>> {
+        return repository.searchWord(word)
+    }
 }
