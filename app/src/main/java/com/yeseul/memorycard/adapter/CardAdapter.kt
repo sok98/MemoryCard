@@ -6,13 +6,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yeseul.memorycard.databinding.ItemWordCardBinding
-import com.yeseul.memorycard.data.CardItem
+import com.yeseul.memorycard.data.db.entity.Word
 
-class CardAdapter : ListAdapter<CardItem, CardAdapter.ViewHolder>(diffUtil) {
+class CardAdapter : ListAdapter<Word, CardAdapter.ViewHolder>(diffUtil) {
 
     inner class ViewHolder(private val binding: ItemWordCardBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(cardItem: CardItem) {
-            binding.wordTextView.text = cardItem.word
+        fun bind(word: Word) {
+            binding.wordTextView.text = word.word
         }
     }
 
@@ -25,12 +25,12 @@ class CardAdapter : ListAdapter<CardItem, CardAdapter.ViewHolder>(diffUtil) {
     }
 
     companion object {
-        val diffUtil = object : DiffUtil.ItemCallback<CardItem>() {
-            override fun areItemsTheSame(oldItem: CardItem, newItem: CardItem): Boolean {
-                return oldItem.word == newItem.word
+        val diffUtil = object : DiffUtil.ItemCallback<Word>() {
+            override fun areItemsTheSame(oldItem: Word, newItem: Word): Boolean {
+                return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: CardItem, newItem: CardItem): Boolean {
+            override fun areContentsTheSame(oldItem: Word, newItem: Word): Boolean {
                 return oldItem == newItem
             }
 

@@ -4,56 +4,43 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.datastore.DataStore
-import androidx.datastore.preferences.Preferences
-import androidx.datastore.preferences.createDataStore
-import androidx.datastore.preferences.preferencesKey
-import androidx.lifecycle.lifecycleScope
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import com.yeseul.memorycard.adapter.CardAdapter
-import com.yeseul.memorycard.data.CardItem
 import com.yeseul.memorycard.databinding.ActivityWordCardBinding
+import com.yeseul.memorycard.presentation.WordViewModel
 import com.yeseul.memorycard.presentation.wordlist.WordListActivity
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
 import com.yuyakaido.android.cardstackview.CardStackListener
 import com.yuyakaido.android.cardstackview.Direction
 import com.yuyakaido.android.cardstackview.StackFrom
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 
 class WordCardActivity : AppCompatActivity(), CardStackListener {
 
     private lateinit var binding: ActivityWordCardBinding
-
-    private lateinit var dataStore: DataStore<Preferences>
-    private lateinit var userId : String
-    private lateinit var wordDB : DatabaseReference
-
     private val manager by lazy {
         CardStackLayoutManager(this, this)
     }
     private val adapter = CardAdapter()
-    private val cardItems = mutableListOf<CardItem>()
+    private val model: WordViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWordCardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loadCard()
-        initCardStackView()
         initReloadCardButton()
         initShowWordListButton()
+        initCardStackView()
+        loadCard()
 
     }
 
     private fun loadCard() {
-
+        model.getAll().observe(this, Observer { wordList ->
+            adapter.submitList(wordList)
+            adapter.notifyDataSetChanged()
+        })
     }
 
     private fun initCardStackView() {
@@ -76,7 +63,7 @@ class WordCardActivity : AppCompatActivity(), CardStackListener {
     }
 
     private fun getCardItems() {
-        cardItems.clear()
+//        cardItems.clear()
 //        wordDB.addChildEventListener(object: ChildEventListener {
 //            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
 //                val word = snapshot.child(WORD).value.toString()
