@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.yeseul.memorycard.R
 import com.yeseul.memorycard.adapter.WordAdapter
 import com.yeseul.memorycard.presentation.wordcard.WordCardActivity
 import com.yeseul.memorycard.databinding.ActivityWordListBinding
@@ -22,6 +23,7 @@ class WordListActivity : AppCompatActivity() {
     private val model: WordViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         binding = ActivityWordListBinding.inflate(layoutInflater)
         setContentView(binding.root)
