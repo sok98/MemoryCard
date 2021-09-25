@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.wordlist.WordListActivity">
+    tools:context=".presentation.wordlist.WordListFragment">
 
     <TextView
         android:id="@+id/toolbarTextView"

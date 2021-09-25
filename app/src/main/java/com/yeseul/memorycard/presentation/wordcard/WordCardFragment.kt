@@ -1,18 +1,15 @@
 package com.yeseul.memorycard.presentation.wordcard
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.yeseul.memorycard.adapter.CardAdapter
 import com.yeseul.memorycard.data.db.entity.Word
-import com.yeseul.memorycard.databinding.ActivityWordCardBinding
+import com.yeseul.memorycard.databinding.FragmentWordCardBinding
 import com.yeseul.memorycard.presentation.WordViewModel
-import com.yeseul.memorycard.presentation.wordlist.WordListActivity
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
 import com.yuyakaido.android.cardstackview.CardStackListener
 import com.yuyakaido.android.cardstackview.Direction
@@ -20,21 +17,20 @@ import com.yuyakaido.android.cardstackview.StackFrom
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class WordCardActivity : AppCompatActivity(), CardStackListener {
+class WordCardFragment : Fragment(), CardStackListener {
 
-    private lateinit var binding: ActivityWordCardBinding
+    private lateinit var binding: FragmentWordCardBinding
     private val manager by lazy {
-        CardStackLayoutManager(this, this)
+        CardStackLayoutManager(activity, this)
     }
     private val adapter = CardAdapter()
     private val model: WordViewModel by viewModels()
     private val cardItems = mutableListOf<Word>()
     private var cardId = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityWordCardBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentWordCardBinding.bind(view)
 
         initReloadCardButton()
         initShowWordListButton()
@@ -52,7 +48,8 @@ class WordCardActivity : AppCompatActivity(), CardStackListener {
 
     private fun initShowWordListButton() {
         binding.showWordListButton.setOnClickListener {
-            startActivity(Intent(this, WordListActivity::class.java))
+            // todo WordList 로 전환 (fragment -> fragment)
+//            startActivity(Intent(this, WordListActivity::class.java))
         }
     }
 
@@ -64,7 +61,7 @@ class WordCardActivity : AppCompatActivity(), CardStackListener {
     }
 
     private fun loadCard() {
-        model.getAll().observe(this, Observer { wordList ->
+        model.getAll().observe(viewLifecycleOwner, Observer { wordList ->
             cardItems.clear()
             wordList.forEach { word ->
                 if (word.id > cardId){

@@ -3,43 +3,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
+    android:layout_height="wrap_content"
+    android:layout_margin="7dp">
 
     <TextView
-        android:id="@+id/checkWordTextView"
+        android:id="@+id/folderTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_margin="10dp"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/counterCheckWordTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="word" />
+        tools:text="폴더" />
 
     <TextView
-        android:id="@+id/checkMeanTextView"
-        android:layout_width="0dp"
+        android:id="@+id/counterCheckWordTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="10dp"
         android:textColor="@color/gray"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/checkWordTextView"
-        app:layout_constraintTop_toBottomOf="@id/checkWordTextView"
-        tools:text="mean" />
+        app:layout_constraintBottom_toBottomOf="@id/counterAllWordTextView"
+        app:layout_constraintEnd_toStartOf="@id/counterAllWordTextView"
+        app:layout_constraintTop_toTopOf="@id/counterAllWordTextView"
+        tools:text="30" />
 
-    <ImageView
-        android:id="@+id/checkImage"
+    <TextView
+        android:id="@+id/counterAllWordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:src="@drawable/ic_baseline_check_box_outline_blank_24"
+        android:textColor="@color/gray"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="/100" />
 
     <View
         android:layout_width="0dp"
@@ -48,6 +50,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

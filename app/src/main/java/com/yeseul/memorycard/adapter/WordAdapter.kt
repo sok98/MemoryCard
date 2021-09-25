@@ -16,14 +16,14 @@ class WordAdapter(val onChecked: (Word, Boolean) -> Unit, val onClicked: (Word) 
         fun bind(word: Word) {
             val checked = word.checked
             changeCheckImage(binding, checked)
-            binding.checkTextView.text = word.word
+            binding.checkWordTextView.text = word.word
 
             binding.checkImage.setOnClickListener {
                 changeCheckImage(binding, !checked)
                 onChecked(word, !checked)
             }
 
-            binding.checkTextView.setOnClickListener {
+            binding.checkWordTextView.setOnClickListener {
                 onClicked(word)
             }
         }
